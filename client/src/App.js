@@ -23,6 +23,13 @@ const NewSurveyForm = lazy(() => import('./components/volunteer/NewSurveyForm'))
 const VolunteerPortal = lazy(() => import('./components/volunteer/VolunteerPortal'));
 const DonatePage = lazy(() => import('./components/donate/DonatePage'));
 
+// Debug: Log environment variable
+console.log('🔍 Environment check:', {
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  NODE_ENV: process.env.NODE_ENV,
+  currentUrl: window.location.href
+});
+
 function App() {
   const pageTitles = {
     '/': 'Home | Volunteer App',
