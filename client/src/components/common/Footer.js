@@ -20,18 +20,18 @@ const Footer = () => {
               We believe every individual deserves dignity, opportunity, and hope.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 <FiFacebook className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 <FiTwitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 <FiInstagram className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 <FiLinkedin className="w-5 h-5" />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -128,15 +128,15 @@ const Footer = () => {
               © 2024 BharatCares. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 Terms of Service
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              </button>
+              <button type="button" className="text-gray-400 hover:text-white transition-colors">
                 Transparency Report
-              </a>
+              </button>
             </div>
           </div>
         </div>

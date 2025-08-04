@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiMapPin, FiCalendar, FiUser, FiEye, FiTrash2 } from 'react-icons/fi';
+import { FiMapPin, FiUser, FiEye, FiTrash2 } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const SurveyList = () => {

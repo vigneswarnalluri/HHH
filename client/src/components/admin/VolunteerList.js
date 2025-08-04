@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiUsers, FiMapPin, FiCalendar, FiEye, FiTrash2, FiAward } from 'react-icons/fi';
+import { FiUsers, FiMapPin, FiEye, FiTrash2, FiAward } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const VolunteerList = () => {
