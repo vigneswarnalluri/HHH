@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 import { FiUser, FiMapPin, FiCamera, FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
 
 const NewSurveyForm = () => {
@@ -290,7 +289,7 @@ const NewSurveyForm = () => {
                 <div>
                   <img
                     src={formData.beggar_photo}
-                    alt="Uploaded photo"
+                    alt="Uploaded"
                     className="w-32 h-32 object-cover rounded-lg mx-auto mb-2"
                   />
                   <p className="text-sm text-gray-600">Click to change photo</p>
@@ -366,7 +365,7 @@ const NewSurveyForm = () => {
               <h4 className="font-medium text-gray-900">Photo</h4>
               <img
                 src={formData.beggar_photo}
-                alt="Beggar photo"
+                alt="Beggar"
                 className="w-32 h-32 object-cover rounded-lg"
               />
             </div>
