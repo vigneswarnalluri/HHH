@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Connection Test</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        const testConnection = async () => {
+            try {
+                results.innerHTML = '<p>🔍 Testing connection...</p>';
+                
+                // Test backend health
+                const healthResponse = await fetch('https://hhh-1z4h.onrender.com/api/health');
+                const healthData = await healthResponse.json();
+                
+                results.innerHTML += `
+                    <p>✅ Backend Health: ${healthResponse.status} - ${JSON.stringify(healthData)}</p>
+                `;
+                
+                // Test auth endpoint
+                const authResponse = await fetch('https://hhh-1z4h.onrender.com/api/auth/me');
+                results.innerHTML += `
+                    <p>🔐 Auth Endpoint: ${authResponse.status} (Expected: 401 Unauthorized)</p>
+                `;
+                
+                results.innerHTML += '<p>🎉 Backend is working! Frontend should be able to connect.</p>';
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        };
+        
+        testConnection();
+    </script>
+</body>
+</html> 

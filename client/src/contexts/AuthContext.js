@@ -19,7 +19,10 @@ export const AuthProvider = ({ children }) => {
 
   // Configure axios defaults
   useEffect(() => {
-    // Use relative URLs to work with the proxy
+    // Set base URL for API calls
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    axios.defaults.baseURL = baseURL;
+    
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
