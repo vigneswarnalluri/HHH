@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import Step1Aadhaar from './Step1Aadhaar';
 import Step2Location from './Step2Location';

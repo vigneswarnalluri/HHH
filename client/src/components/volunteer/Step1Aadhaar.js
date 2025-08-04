@@ -12,9 +12,7 @@ const Step1Aadhaar = ({ data, onNext, onUpdate }) => {
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneIfNoAadhaar || '');
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid }
+    handleSubmit
   } = useForm({
     mode: 'onChange'
   });

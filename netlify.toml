@@ -1,10 +1,11 @@
 [build]
   base = "client"
   publish = "build"
-  command = "yarn build"
+  command = "yarn install && yarn build"
 
 [build.environment]
   NODE_VERSION = "18"
+  YARN_VERSION = "1.22.22"
 
 [[redirects]]
   from = "/*"

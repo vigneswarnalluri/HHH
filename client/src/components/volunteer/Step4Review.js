@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiUser, FiMapPin, FiFileText, FiCheckCircle, FiEdit } from 'react-icons/fi';
+import { FiUser, FiMapPin, FiFileText, FiCheckCircle } from 'react-icons/fi';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 

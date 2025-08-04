@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FiMapPin, FiNavigation, FiGlobe } from 'react-icons/fi';
 
 const Step2Location = ({ data, onNext, onPrev, onUpdate }) => {
-  const [location, setLocation] = useState(data || {});
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [address, setAddress] = useState(data?.address || '');
   const [coordinates, setCoordinates] = useState(data?.coordinates || null);

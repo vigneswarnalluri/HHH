@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { FiUser, FiMapPin, FiCamera, FiFileText, FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
+import { FiUser, FiMapPin, FiCamera, FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
 
 const NewSurveyForm = () => {
-  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     beggar_name: '',

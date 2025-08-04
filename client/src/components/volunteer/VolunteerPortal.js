@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -8,11 +8,7 @@ const VolunteerPortal = () => {
   const [hasProfile, setHasProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkVolunteerProfile();
-  }, [user]);
-
-  const checkVolunteerProfile = async () => {
+  const checkVolunteerProfile = useCallback(async () => {
     try {
       console.log('🔍 Checking volunteer profile for user:', user?.id);
       const response = await fetch('/api/volunteer/profile', {
@@ -35,7 +31,11 @@ const VolunteerPortal = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    checkVolunteerProfile();
+  }, [checkVolunteerProfile]);
 
   if (loading) {
     return <LoadingSpinner />;
