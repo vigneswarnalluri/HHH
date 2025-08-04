@@ -7,6 +7,7 @@ import VolunteerDetail from './VolunteerDetail';
 import DashboardStats from './DashboardStats';
 import SurveyList from './SurveyList';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { apiGet } from '../../utils/api';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -21,17 +22,12 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     try {
       console.log('🔍 Fetching admin stats...');
-      const response = await fetch('/api/admin/stats', {
+      const token = localStorage.getItem('token');
+      const data = await apiGet('/api/admin/stats', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch stats');
-      }
-
-      const data = await response.json();
       console.log('📊 Admin stats received:', data);
       setStats(data);
     } catch (error) {

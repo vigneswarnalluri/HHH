@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiUsers, FiMapPin, FiEye, FiTrash2, FiAward } from 'react-icons/fi';
 import { format } from 'date-fns';
+import { apiGet, apiDelete } from '../../utils/api';
 
 const VolunteerList = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -16,17 +17,12 @@ const VolunteerList = () => {
   const fetchVolunteers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/volunteers', {
+      const token = localStorage.getItem('token');
+      const data = await apiGet('/api/admin/volunteers', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch volunteers');
-      }
-
-      const data = await response.json();
       setVolunteers(data.volunteers || []);
     } catch (error) {
       console.error('Error fetching volunteers:', error);
@@ -42,16 +38,12 @@ const VolunteerList = () => {
     }
 
     try {
-      const response = await fetch(`/api/admin/volunteers/${volunteerId}`, {
-        method: 'DELETE',
+      const token = localStorage.getItem('token');
+      await apiDelete(`/api/admin/volunteers/${volunteerId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete volunteer');
-      }
 
       // Remove the volunteer from the list
       setVolunteers(volunteers.filter(volunteer => volunteer.id !== volunteerId));
@@ -64,17 +56,12 @@ const VolunteerList = () => {
 
   const handleViewDetails = async (volunteerId) => {
     try {
-      const response = await fetch(`/api/admin/volunteers/${volunteerId}`, {
+      const token = localStorage.getItem('token');
+      const data = await apiGet(`/api/admin/volunteers/${volunteerId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch volunteer details');
-      }
-
-      const data = await response.json();
       setSelectedVolunteer(data);
       setShowDetailsModal(true);
     } catch (error) {

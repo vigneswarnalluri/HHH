@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiMapPin, FiUser, FiEye, FiTrash2 } from 'react-icons/fi';
 import { format } from 'date-fns';
+import { apiGet, apiDelete } from '../../utils/api';
 
 const SurveyList = () => {
   const [surveys, setSurveys] = useState([]);
@@ -23,17 +24,12 @@ const SurveyList = () => {
     try {
       setLoading(true);
       console.log('🔍 Fetching surveys...');
-      const response = await fetch('/api/admin/surveys', {
+      const token = localStorage.getItem('token');
+      const data = await apiGet('/api/admin/surveys', {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch surveys');
-      }
-
-      const data = await response.json();
       console.log('📊 Surveys received:', data.surveys?.length || 0);
       setSurveys(data.surveys || []);
     } catch (error) {
@@ -50,16 +46,12 @@ const SurveyList = () => {
     }
 
     try {
-      const response = await fetch(`/api/volunteer/surveys/${surveyId}`, {
-        method: 'DELETE',
+      const token = localStorage.getItem('token');
+      await apiDelete(`/api/volunteer/surveys/${surveyId}`, {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete survey');
-      }
 
       setSurveys(surveys.filter(survey => survey.id !== surveyId));
       alert('Survey deleted successfully');
