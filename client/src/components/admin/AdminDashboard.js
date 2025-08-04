@@ -22,8 +22,12 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     try {
       console.log('🔍 Fetching admin stats...');
+      
+      const startTime = Date.now();
       const data = await apiGet('/api/admin/stats');
-      console.log('📊 Admin stats received:', data);
+      const loadTime = Date.now() - startTime;
+      
+      console.log(`📊 Admin stats received (${loadTime}ms):`, data);
       setStats(data);
     } catch (error) {
       console.error('Error fetching stats:', error);

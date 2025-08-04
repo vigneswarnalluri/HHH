@@ -17,11 +17,17 @@ const VolunteerList = () => {
   const fetchVolunteers = async () => {
     try {
       setLoading(true);
+      setError(null); // Clear any previous errors
+      
+      const startTime = Date.now();
       const data = await apiGet('/api/admin/volunteers');
+      const loadTime = Date.now() - startTime;
+      
+      console.log(`📊 Volunteers loaded (${loadTime}ms):`, data.volunteers?.length || 0);
       setVolunteers(data.volunteers || []);
     } catch (error) {
       console.error('Error fetching volunteers:', error);
-      setError('Failed to load volunteers');
+      setError('Failed to load volunteers. Please try again.');
     } finally {
       setLoading(false);
     }

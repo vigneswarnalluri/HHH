@@ -105,16 +105,48 @@ class SurveyService {
   // Get all surveys (for admin)
   async getAllSurveys() {
     try {
-      const { data, error } = await supabase
+      console.log('🔍 Fetching all surveys from database...');
+      
+      // First get all surveys
+      const { data: surveys, error: surveysError } = await supabase
         .from('surveys')
-        .select(`
-          *,
-          volunteer:users!surveys_volunteer_id_fkey(email, phone)
-        `)
+        .select('*')
         .order('survey_date', { ascending: false });
 
-      if (error) throw error;
-      return data;
+      if (surveysError) {
+        console.error('Error fetching surveys:', surveysError);
+        throw surveysError;
+      }
+
+      console.log(`📊 Found ${surveys?.length || 0} surveys`);
+
+      // Then get all volunteers to map their details
+      const { data: volunteers, error: volunteersError } = await supabase
+        .from('users')
+        .select('id, email, name')
+        .eq('role', 'volunteer');
+
+      if (volunteersError) {
+        console.error('Error fetching volunteers:', volunteersError);
+        // Don't throw error, just return surveys without volunteer details
+        return surveys || [];
+      }
+
+      // Create a map for quick volunteer lookup
+      const volunteerMap = {};
+      volunteers.forEach(volunteer => {
+        volunteerMap[volunteer.id] = volunteer;
+      });
+
+      // Add volunteer details to surveys
+      const surveysWithVolunteerDetails = surveys.map(survey => ({
+        ...survey,
+        volunteer_email: volunteerMap[survey.volunteer_id]?.email || 'Unknown',
+        volunteer_name: volunteerMap[survey.volunteer_id]?.name || 'Unknown'
+      }));
+
+      console.log(`✅ Returning ${surveysWithVolunteerDetails.length} surveys with volunteer details`);
+      return surveysWithVolunteerDetails;
     } catch (error) {
       console.error('Get all surveys error:', error);
       throw error;

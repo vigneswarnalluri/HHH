@@ -23,13 +23,18 @@ const SurveyList = () => {
   const fetchSurveys = async () => {
     try {
       setLoading(true);
+      setError(null); // Clear any previous errors
       console.log('🔍 Fetching surveys...');
+      
+      const startTime = Date.now();
       const data = await apiGet('/api/admin/surveys');
-      console.log('📊 Surveys received:', data.surveys?.length || 0);
+      const loadTime = Date.now() - startTime;
+      
+      console.log(`📊 Surveys received: ${data.surveys?.length || 0} (${loadTime}ms)`);
       setSurveys(data.surveys || []);
     } catch (error) {
       console.error('Error fetching surveys:', error);
-      setError('Failed to load surveys');
+      setError('Failed to load surveys. Please try again.');
     } finally {
       setLoading(false);
     }
