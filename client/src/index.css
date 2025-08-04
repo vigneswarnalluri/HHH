@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS Variables for Social Impact Color Palette */
+:root {
+  /* Primary Colors */
+  --indigo-blue: #3252A8;
+  --bright-orange: #FF9200;
+  
+  /* Secondary Colors */
+  --leaf-green: #5ABC4C;
+  --sunshine-yellow: #FFD447;
+  
+  /* Neutrals */
+  --warm-white: #FAFAF8;
+  --charcoal-gray: #23221F;
+  --light-cool-gray: #E7E9ED;
+  
+  /* Accents */
+  --crimson-red: #E43C5C;
+  --aqua-blue: #23BBF0;
+}
+
+/* Custom Tailwind Classes */
+@layer utilities {
+  .bg-indigo-blue { background-color: var(--indigo-blue); }
+  .bg-bright-orange { background-color: var(--bright-orange); }
+  .bg-leaf-green { background-color: var(--leaf-green); }
+  .bg-sunshine-yellow { background-color: var(--sunshine-yellow); }
+  .bg-warm-white { background-color: var(--warm-white); }
+  .bg-light-cool-gray { background-color: var(--light-cool-gray); }
+  .bg-crimson-red { background-color: var(--crimson-red); }
+  .bg-aqua-blue { background-color: var(--aqua-blue); }
+  
+  .text-indigo-blue { color: var(--indigo-blue); }
+  .text-bright-orange { color: var(--bright-orange); }
+  .text-leaf-green { color: var(--leaf-green); }
+  .text-sunshine-yellow { color: var(--sunshine-yellow); }
+  .text-charcoal-gray { color: var(--charcoal-gray); }
+  .text-crimson-red { color: var(--crimson-red); }
+  .text-aqua-blue { color: var(--aqua-blue); }
+  
+  .border-indigo-blue { border-color: var(--indigo-blue); }
+  .border-bright-orange { border-color: var(--bright-orange); }
+  .border-leaf-green { border-color: var(--leaf-green); }
+  .border-light-cool-gray { border-color: var(--light-cool-gray); }
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--warm-white);
+  color: var(--charcoal-gray);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom Component Styles */
+.btn-primary {
+  @apply bg-bright-orange hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+}
+
+.btn-secondary {
+  @apply bg-indigo-blue hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
+}
+
+.btn-outline {
+  @apply border-2 border-indigo-blue text-indigo-blue hover:bg-indigo-blue hover:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-light-cool-gray;
+}
+
+.section-bg {
+  @apply bg-light-cool-gray;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, var(--indigo-blue) 0%, var(--bright-orange) 100%);
+}
+
+.accent-gradient {
+  background: linear-gradient(135deg, var(--leaf-green) 0%, var(--aqua-blue) 100%);
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus Styles for Accessibility */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--bright-orange);
+  outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-cool-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--indigo-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bright-orange);
+} 

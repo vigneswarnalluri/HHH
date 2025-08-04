@@ -1,0 +1,29 @@
+{
+  "name": "volunteer-management-system",
+  "version": "1.0.0",
+  "description": "A comprehensive web application for managing volunteers and admin operations",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "seed": "cd server && npm run seed"
+  },
+  "keywords": [
+    "volunteer",
+    "management",
+    "admin",
+    "aadhaar",
+    "geolocation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "source-map-explorer": "^2.5.3"
+  },
+  "dependencies": {
+    "react-helmet-async": "^2.0.5"
+  }
+}
