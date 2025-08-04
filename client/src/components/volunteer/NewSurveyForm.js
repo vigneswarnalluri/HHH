@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiUser, FiMapPin, FiCamera, FiCheckCircle, FiArrowLeft } from 'react-icons/fi';
+import { apiPost } from '../../utils/api';
 
 const NewSurveyForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -84,30 +85,10 @@ const NewSurveyForm = () => {
         survey_notes: formData.survey_notes || undefined
       };
 
-      // Debug: Log the token and survey data
-      const token = localStorage.getItem('token');
-      console.log('🔍 Debug: Token exists:', !!token);
+      // Debug: Log the survey data
       console.log('🔍 Debug: Survey data:', surveyData);
 
-      const response = await fetch('/api/volunteer/surveys', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(surveyData)
-      });
-
-      console.log('🔍 Debug: Response status:', response.status);
-      console.log('🔍 Debug: Response ok:', response.ok);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.log('🔍 Debug: Error data:', errorData);
-        throw new Error(errorData.error || 'Failed to create survey');
-      }
-
-      const result = await response.json();
+      const result = await apiPost('/api/volunteer/surveys', surveyData);
       console.log('🔍 Debug: Success result:', result);
       alert('Survey created successfully!');
       window.location.href = '/volunteer/surveys';

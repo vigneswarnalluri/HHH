@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { FiMapPin, FiUser, FiCalendar, FiPlus, FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { apiGet, apiDelete } from '../../utils/api';
 
 const SurveyDashboard = () => {
   const { user } = useAuth();
@@ -21,25 +22,9 @@ const SurveyDashboard = () => {
   const fetchSurveys = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      console.log('🔍 Fetching surveys with token:', token ? 'exists' : 'missing');
+      console.log('🔍 Fetching surveys...');
       
-      const response = await fetch('/api/volunteer/surveys', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      console.log('🔍 Response status:', response.status);
-      console.log('🔍 Response ok:', response.ok);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log('🔍 Error response:', errorText);
-        throw new Error('Failed to fetch surveys');
-      }
-
-      const data = await response.json();
+      const data = await apiGet('/api/volunteer/surveys');
       console.log('🔍 Response data:', data);
       console.log('🔍 Surveys count:', data.surveys?.length || 0);
       console.log('🔍 Survey count from server:', data.surveyCount || 0);
@@ -60,16 +45,7 @@ const SurveyDashboard = () => {
     }
 
     try {
-      const response = await fetch(`/api/volunteer/surveys/${surveyId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete survey');
-      }
+      await apiDelete(`/api/volunteer/surveys/${surveyId}`);
 
       // Remove the survey from the list
       setSurveys(surveys.filter(survey => survey.id !== surveyId));
