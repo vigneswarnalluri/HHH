@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiUsers, FiCheckCircle, FiClock, FiMapPin, FiDownload, FiCalendar, FiBarChart } from 'react-icons/fi';
+import { FiUsers, FiCheckCircle, FiClock, FiMapPin, FiCalendar, FiBarChart } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const DashboardStats = ({ stats }) => {

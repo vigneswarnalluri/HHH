@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiUsers, FiMapPin, FiCalendar, FiEye, FiEdit, FiTrash2, FiMail, FiPhone, FiAward } from 'react-icons/fi';
+import { FiUsers, FiMapPin, FiCalendar, FiEye, FiTrash2, FiAward } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const VolunteerList = () => {
@@ -83,14 +83,7 @@ const VolunteerList = () => {
     }
   };
 
-  const parseCoordinates = (coordString) => {
-    if (!coordString) return null;
-    const match = coordString.match(/\(([^,]+),([^)]+)\)/);
-    if (match) {
-      return [parseFloat(match[1]), parseFloat(match[2])];
-    }
-    return null;
-  };
+
 
   if (loading) {
     return (

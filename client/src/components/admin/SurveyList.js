@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FiMapPin, FiCalendar, FiUser, FiEye, FiTrash2, FiDownload, FiFilter } from 'react-icons/fi';
+import { FiMapPin, FiCalendar, FiUser, FiEye, FiTrash2 } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const SurveyList = () => {
@@ -74,14 +74,7 @@ const SurveyList = () => {
     setShowDetailsModal(true);
   };
 
-  const parseCoordinates = (coordString) => {
-    if (!coordString) return null;
-    const match = coordString.match(/\(([^,]+),([^)]+)\)/);
-    if (match) {
-      return [parseFloat(match[1]), parseFloat(match[2])];
-    }
-    return null;
-  };
+
 
   const filteredSurveys = surveys.filter(survey => {
     if (filters.volunteer && !survey.volunteer_email?.toLowerCase().includes(filters.volunteer.toLowerCase())) {
