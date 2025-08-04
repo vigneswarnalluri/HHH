@@ -24,12 +24,7 @@ const SurveyList = () => {
     try {
       setLoading(true);
       console.log('🔍 Fetching surveys...');
-      const token = localStorage.getItem('token');
-      const data = await apiGet('/api/admin/surveys', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const data = await apiGet('/api/admin/surveys');
       console.log('📊 Surveys received:', data.surveys?.length || 0);
       setSurveys(data.surveys || []);
     } catch (error) {
@@ -46,12 +41,7 @@ const SurveyList = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      await apiDelete(`/api/volunteer/surveys/${surveyId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      await apiDelete(`/api/volunteer/surveys/${surveyId}`);
 
       setSurveys(surveys.filter(survey => survey.id !== surveyId));
       alert('Survey deleted successfully');

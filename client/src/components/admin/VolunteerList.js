@@ -17,12 +17,7 @@ const VolunteerList = () => {
   const fetchVolunteers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const data = await apiGet('/api/admin/volunteers', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const data = await apiGet('/api/admin/volunteers');
       setVolunteers(data.volunteers || []);
     } catch (error) {
       console.error('Error fetching volunteers:', error);
@@ -38,12 +33,7 @@ const VolunteerList = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      await apiDelete(`/api/admin/volunteers/${volunteerId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      await apiDelete(`/api/admin/volunteers/${volunteerId}`);
 
       // Remove the volunteer from the list
       setVolunteers(volunteers.filter(volunteer => volunteer.id !== volunteerId));
@@ -56,12 +46,7 @@ const VolunteerList = () => {
 
   const handleViewDetails = async (volunteerId) => {
     try {
-      const token = localStorage.getItem('token');
-      const data = await apiGet(`/api/admin/volunteers/${volunteerId}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const data = await apiGet(`/api/admin/volunteers/${volunteerId}`);
       setSelectedVolunteer(data);
       setShowDetailsModal(true);
     } catch (error) {

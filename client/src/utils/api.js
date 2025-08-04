@@ -3,10 +3,15 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 export const apiCall = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
+  
+  // Get token from localStorage
+  const token = localStorage.getItem('token');
+  
   const response = await fetch(url, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` }),
       ...options.headers,
     },
   });

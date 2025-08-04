@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        const testCORS = async () => {
+            try {
+                results.innerHTML = '<p>Testing CORS configuration...</p>';
+                
+                // Test health endpoint
+                const healthResponse = await fetch('https://hhh-1z4h.onrender.com/api/health');
+                results.innerHTML += `<p>Health endpoint: ${healthResponse.status} ✅</p>`;
+                
+                // Test auth endpoint (should return 401, not CORS error)
+                const authResponse = await fetch('https://hhh-1z4h.onrender.com/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@example.com',
+                        password: 'test'
+                    })
+                });
+                
+                results.innerHTML += `<p>Auth endpoint: ${authResponse.status} ✅</p>`;
+                
+                if (authResponse.status === 401) {
+                    results.innerHTML += '<p>🎉 CORS is working! The request reached the server.</p>';
+                } else {
+                    results.innerHTML += '<p>❌ Unexpected response</p>';
+                }
+                
+            } catch (error) {
+                if (error.message.includes('CORS')) {
+                    results.innerHTML += '<p>❌ CORS error still present</p>';
+                } else {
+                    results.innerHTML += `<p>✅ No CORS error: ${error.message}</p>`;
+                }
+            }
+        };
+        
+        testCORS();
+    </script>
+</body>
+</html> 

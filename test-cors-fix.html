@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CORS Fix Test</title>
+</head>
+<body>
+    <h1>CORS Fix Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        const currentOrigin = window.location.origin;
+        
+        results.innerHTML = `<p>Current origin: ${currentOrigin}</p>`;
+        
+        const testCORS = async () => {
+            try {
+                results.innerHTML += '<p>Testing CORS configuration...</p>';
+                
+                // Test 1: Health endpoint (should work)
+                try {
+                    const healthResponse = await fetch('https://hhh-1z4h.onrender.com/api/health');
+                    results.innerHTML += `<p>✅ Health endpoint: ${healthResponse.status}</p>`;
+                    
+                    const healthData = await healthResponse.json();
+                    results.innerHTML += `<p>Health data: ${JSON.stringify(healthData)}</p>`;
+                } catch (error) {
+                    results.innerHTML += `<p>❌ Health endpoint failed: ${error.message}</p>`;
+                }
+                
+                // Test 2: Auth endpoint with CORS preflight
+                try {
+                    const authResponse = await fetch('https://hhh-1z4h.onrender.com/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: 'test@example.com',
+                            password: 'test'
+                        })
+                    });
+                    
+                    results.innerHTML += `<p>✅ Auth endpoint: ${authResponse.status}</p>`;
+                    
+                    if (authResponse.status === 401) {
+                        results.innerHTML += '<p>🎉 CORS is working! Request reached server.</p>';
+                    } else {
+                        const authData = await authResponse.json();
+                        results.innerHTML += `<p>Auth response: ${JSON.stringify(authData)}</p>`;
+                    }
+                } catch (error) {
+                    if (error.message.includes('CORS') || error.message.includes('blocked')) {
+                        results.innerHTML += `<p>❌ CORS still blocked: ${error.message}</p>`;
+                    } else {
+                        results.innerHTML += `<p>✅ No CORS error: ${error.message}</p>`;
+                    }
+                }
+                
+                // Test 3: Admin endpoint (should return 401 without token)
+                try {
+                    const adminResponse = await fetch('https://hhh-1z4h.onrender.com/api/admin/stats', {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    results.innerHTML += `<p>✅ Admin endpoint: ${adminResponse.status}</p>`;
+                    
+                    if (adminResponse.status === 401) {
+                        results.innerHTML += '<p>🎉 Admin endpoint CORS working!</p>';
+                    }
+                } catch (error) {
+                    if (error.message.includes('CORS') || error.message.includes('blocked')) {
+                        results.innerHTML += `<p>❌ Admin CORS blocked: ${error.message}</p>`;
+                    } else {
+                        results.innerHTML += `<p>✅ Admin no CORS error: ${error.message}</p>`;
+                    }
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ General error: ${error.message}</p>`;
+            }
+        };
+        
+        testCORS();
+    </script>
+</body>
+</html> 

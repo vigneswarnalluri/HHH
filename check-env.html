@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Environment Variable Check</title>
+</head>
+<body>
+    <h1>Environment Variable Check</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        results.innerHTML = `
+            <h2>Environment Variables:</h2>
+            <p><strong>REACT_APP_API_URL:</strong> ${process.env.REACT_APP_API_URL || 'NOT SET'}</p>
+            <p><strong>NODE_ENV:</strong> ${process.env.NODE_ENV || 'NOT SET'}</p>
+            <p><strong>Current URL:</strong> ${window.location.href}</p>
+            <p><strong>API Base URL (from code):</strong> ${process.env.REACT_APP_API_URL || 'http://localhost:5000'}</p>
+        `;
+        
+        // Test if we can access the backend
+        const testBackend = async () => {
+            try {
+                const apiUrl = process.env.REACT_APP_API_URL || 'https://hhh-1z4h.onrender.com';
+                results.innerHTML += `<p>🔍 Testing backend at: ${apiUrl}</p>`;
+                
+                const response = await fetch(`${apiUrl}/api/health`);
+                results.innerHTML += `<p>✅ Backend health check: ${response.status}</p>`;
+                
+                const data = await response.json();
+                results.innerHTML += `<p>📊 Health data: ${JSON.stringify(data)}</p>`;
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        };
+        
+        testBackend();
+    </script>
+</body>
+</html> 

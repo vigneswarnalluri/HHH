@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frontend API Test</title>
+</head>
+<body>
+    <h1>Frontend API Connection Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        const API_BASE_URL = 'https://hhh-1z4h.onrender.com';
+        
+        const testFrontendAPI = async () => {
+            try {
+                results.innerHTML = '<p>🔍 Testing frontend API connection...</p>';
+                
+                // Test with a valid token (you'll need to login first)
+                const token = localStorage.getItem('token');
+                
+                if (!token) {
+                    results.innerHTML += '<p>❌ No token found. Please login first at <a href="https://bharathcare.netlify.app" target="_blank">your app</a></p>';
+                    return;
+                }
+                
+                results.innerHTML += `<p>✅ Token found: ${token.substring(0, 20)}...</p>`;
+                
+                // Test admin stats with token
+                const statsResponse = await fetch(`${API_BASE_URL}/api/admin/stats`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                results.innerHTML += `<p>📊 Admin stats status: ${statsResponse.status}</p>`;
+                
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    results.innerHTML += `<p>✅ Stats data: ${JSON.stringify(statsData)}</p>`;
+                } else {
+                    const errorData = await statsResponse.json().catch(() => ({}));
+                    results.innerHTML += `<p>❌ Error: ${JSON.stringify(errorData)}</p>`;
+                }
+                
+                // Test volunteers with token
+                const volunteersResponse = await fetch(`${API_BASE_URL}/api/admin/volunteers`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                results.innerHTML += `<p>👥 Volunteers status: ${volunteersResponse.status}</p>`;
+                
+                if (volunteersResponse.ok) {
+                    const volunteersData = await volunteersResponse.json();
+                    results.innerHTML += `<p>✅ Volunteers data: ${volunteersData.volunteers?.length || 0} volunteers found</p>`;
+                } else {
+                    const errorData = await volunteersResponse.json().catch(() => ({}));
+                    results.innerHTML += `<p>❌ Error: ${JSON.stringify(errorData)}</p>`;
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        };
+        
+        testFrontendAPI();
+    </script>
+</body>
+</html> 

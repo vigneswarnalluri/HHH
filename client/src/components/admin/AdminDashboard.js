@@ -22,12 +22,7 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     try {
       console.log('🔍 Fetching admin stats...');
-      const token = localStorage.getItem('token');
-      const data = await apiGet('/api/admin/stats', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      const data = await apiGet('/api/admin/stats');
       console.log('📊 Admin stats received:', data);
       setStats(data);
     } catch (error) {
