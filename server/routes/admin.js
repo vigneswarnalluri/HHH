@@ -4,7 +4,7 @@ const { auth } = require('../middleware/auth');
 const userService = require('../services/userService');
 const volunteerProfileService = require('../services/volunteerProfileService');
 const surveyService = require('../services/surveyService');
-const { supabase } = require('../config/supabase');
+const { supabase, supabaseAdmin } = require('../config/supabase');
 
 const router = express.Router();
 
@@ -30,8 +30,8 @@ router.get('/stats', [auth, (req, res, next) => {
     const surveys = await surveyService.getAllSurveys();
     console.log('📊 Found surveys:', surveys.length);
 
-    // Get donation statistics
-    const { data: donations, error: donationError } = await supabase
+    // Get donation statistics using admin client to bypass RLS
+    const { data: donations, error: donationError } = await supabaseAdmin
       .from('donations')
       .select('amount, status');
 
