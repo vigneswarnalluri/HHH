@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Backend Status Test</title>
+</head>
+<body>
+    <h1>Backend Status Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'https://hhh-1z4h.onrender.com';
+        
+        async function testBackend() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test health endpoint
+                console.log('Testing health endpoint...');
+                const healthResponse = await fetch(`${API_URL}/api/health`);
+                console.log('Health status:', healthResponse.status);
+                
+                if (healthResponse.ok) {
+                    const healthData = await healthResponse.json();
+                    results.innerHTML += `<p>✅ Health endpoint working: ${JSON.stringify(healthData)}</p>`;
+                } else {
+                    results.innerHTML += `<p>❌ Health endpoint failed: ${healthResponse.status}</p>`;
+                }
+                
+                // Test donation endpoint
+                console.log('Testing donation endpoint...');
+                const donationData = {
+                    amount: 500,
+                    donor_name: 'Test Donor',
+                    donor_email: 'test@example.com',
+                    donor_phone: '+91-9876543210',
+                    payment_method: 'card',
+                    message: 'Test donation'
+                };
+                
+                const donationResponse = await fetch(`${API_URL}/api/donations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(donationData)
+                });
+                
+                console.log('Donation status:', donationResponse.status);
+                
+                if (donationResponse.ok) {
+                    const donationResult = await donationResponse.json();
+                    results.innerHTML += `<p>✅ Donation endpoint working: ${JSON.stringify(donationResult)}</p>`;
+                } else {
+                    const errorText = await donationResponse.text();
+                    results.innerHTML += `<p>❌ Donation endpoint failed: ${donationResponse.status} - ${errorText}</p>`;
+                }
+                
+            } catch (error) {
+                console.error('API test failed:', error);
+                results.innerHTML += `<p>❌ API test failed: ${error.message}</p>`;
+            }
+        }
+        
+        testBackend();
+    </script>
+</body>
+</html> 

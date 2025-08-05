@@ -85,6 +85,10 @@ const DonatePage = () => {
         message: `Donation via ${paymentMethod}`
       };
 
+      console.log('🔍 Environment check:', {
+        REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+        NODE_ENV: process.env.NODE_ENV
+      });
       console.log('Submitting donation:', donationData);
 
       const result = await apiPost('/api/donations', donationData);
