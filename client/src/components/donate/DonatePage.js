@@ -200,7 +200,7 @@ const DonatePage = () => {
                           onClick={() => handleAmountSelect(amount.value)}
                           className={`p-4 rounded-lg border-2 font-medium transition-all duration-300 ${
                             selectedAmount === amount.value
-                              ? 'border-bright-orange bg-bright-orange bg-opacity-10 text-bright-orange'
+                              ? 'border-bright-orange bg-bright-orange text-white shadow-md'
                               : 'border-light-cool-gray text-charcoal-gray hover:border-indigo-blue hover:text-indigo-blue'
                           }`}
                           initial={{ opacity: 0, y: 20 }}
@@ -225,7 +225,7 @@ const DonatePage = () => {
                           value={customAmount}
                           onChange={(e) => setCustomAmount(e.target.value)}
                           placeholder="Enter custom amount"
-                          className="w-full px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent"
+                          className="w-full px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent bg-white text-charcoal-gray"
                         />
                       </motion.div>
                     )}
@@ -245,7 +245,7 @@ const DonatePage = () => {
                         placeholder="Full Name"
                         value={donorInfo.name}
                         onChange={(e) => setDonorInfo({...donorInfo, name: e.target.value})}
-                        className="px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent"
+                        className="px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent bg-white text-charcoal-gray"
                         required
                       />
                       <input
@@ -253,7 +253,7 @@ const DonatePage = () => {
                         placeholder="Email Address"
                         value={donorInfo.email}
                         onChange={(e) => setDonorInfo({...donorInfo, email: e.target.value})}
-                        className="px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent"
+                        className="px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent bg-white text-charcoal-gray"
                         required
                       />
                     </div>
@@ -262,7 +262,7 @@ const DonatePage = () => {
                       placeholder="Phone Number"
                       value={donorInfo.phone}
                       onChange={(e) => setDonorInfo({...donorInfo, phone: e.target.value})}
-                      className="w-full px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent"
+                      className="w-full px-4 py-3 border border-light-cool-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-blue focus:border-transparent bg-white text-charcoal-gray"
                     />
                   </motion.div>
 
@@ -282,7 +282,7 @@ const DonatePage = () => {
                             key={method.id}
                             className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all duration-300 ${
                               paymentMethod === method.id
-                                ? 'border-bright-orange bg-bright-orange bg-opacity-10'
+                                ? 'border-bright-orange bg-bright-orange text-white shadow-md'
                                 : 'border-light-cool-gray hover:border-indigo-blue'
                             }`}
                             initial={{ opacity: 0, x: -20 }}
@@ -298,10 +298,10 @@ const DonatePage = () => {
                               className="sr-only"
                             />
                             <IconComponent className={`w-5 h-5 mr-3 ${
-                              paymentMethod === method.id ? 'text-bright-orange' : 'text-charcoal-gray'
+                              paymentMethod === method.id ? 'text-white' : 'text-charcoal-gray'
                             }`} />
                             <span className={`font-medium ${
-                              paymentMethod === method.id ? 'text-bright-orange' : 'text-charcoal-gray'
+                              paymentMethod === method.id ? 'text-white' : 'text-charcoal-gray'
                             }`}>
                               {method.name}
                             </span>
