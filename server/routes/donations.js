@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/auth');
+const { auth } = require('../middleware/auth');
 const supabase = require('../config/supabase');
 
 // Get all donations (admin only)
-router.get('/admin/donations', authenticateToken, async (req, res) => {
+router.get('/admin/donations', auth, async (req, res) => {
   try {
     // Check if user is admin
     if (req.user.role !== 'admin') {
@@ -29,7 +29,7 @@ router.get('/admin/donations', authenticateToken, async (req, res) => {
 });
 
 // Get donation statistics (admin only)
-router.get('/admin/donation-stats', authenticateToken, async (req, res) => {
+router.get('/admin/donation-stats', auth, async (req, res) => {
   try {
     // Check if user is admin
     if (req.user.role !== 'admin') {
