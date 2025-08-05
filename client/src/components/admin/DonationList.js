@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiDollarSign, FiUser, FiMail, FiPhone, FiCalendar, FiCreditCard, FiCheckCircle, FiClock, FiEye, FiX } from 'react-icons/fi';
+import { FiDollarSign, FiMail, FiPhone, FiCreditCard, FiCheckCircle, FiClock, FiEye, FiX } from 'react-icons/fi';
 import { apiGet } from '../../utils/api';
 
 const DonationList = () => {
