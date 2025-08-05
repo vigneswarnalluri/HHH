@@ -4,7 +4,7 @@ const { auth } = require('../middleware/auth');
 const userService = require('../services/userService');
 const volunteerProfileService = require('../services/volunteerProfileService');
 const surveyService = require('../services/surveyService');
-const supabase = require('../config/supabase');
+const { supabase } = require('../config/supabase');
 
 const router = express.Router();
 
