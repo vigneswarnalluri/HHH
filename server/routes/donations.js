@@ -156,11 +156,10 @@ router.post('/donations', async (req, res) => {
 // Health check for donations (MUST come before the dynamic route)
 router.get('/donations/health', async (req, res) => {
   try {
-    // Test if donations table exists
-    const { data, error } = await supabase
+    // Test if donations table exists and get count
+    const { count, error } = await supabase
       .from('donations')
-      .select('id')
-      .limit(1);
+      .select('*', { count: 'exact', head: true });
 
     if (error) {
       if (error.code === '42P01') {
@@ -180,7 +179,7 @@ router.get('/donations/health', async (req, res) => {
     res.json({ 
       status: 'ok', 
       message: 'Donations table exists and is accessible',
-      count: data?.length || 0
+      count: count || 0
     });
   } catch (error) {
     console.error('Donations health check error:', error);
