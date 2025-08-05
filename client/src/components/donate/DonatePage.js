@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiGift, FiShield, FiHeart, FiUsers, FiTrendingUp, FiCheckCircle, FiCreditCard, FiSmartphone, FiGlobe } from 'react-icons/fi';
+import { FiGift, FiShield, FiHeart, FiUsers, FiTrendingUp, FiCheckCircle, FiCreditCard, FiSmartphone, FiGlobe, FiCheck, FiX } from 'react-icons/fi';
 import AnimatedButton from '../common/AnimatedButton';
 import AnimatedCard from '../common/AnimatedCard';
+import { apiPost } from '../../utils/api';
 
 const DonatePage = () => {
   const [selectedAmount, setSelectedAmount] = useState('');
@@ -13,6 +14,11 @@ const DonatePage = () => {
     email: '',
     phone: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successData, setSuccessData] = useState(null);
 
   const presetAmounts = [
     { value: '500', label: '₹500' },
@@ -48,11 +54,63 @@ const DonatePage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const amount = selectedAmount === 'custom' ? customAmount : selectedAmount;
-    console.log('Donation submitted:', { amount, paymentMethod, donorInfo });
-    // Handle donation submission
+    
+    if (!selectedAmount || (selectedAmount === 'custom' && !customAmount)) {
+      setErrorMessage('Please select or enter a donation amount');
+      setShowError(true);
+      return;
+    }
+
+    if (!donorInfo.name || !donorInfo.email) {
+      setErrorMessage('Please provide your name and email');
+      setShowError(true);
+      return;
+    }
+
+    setIsLoading(true);
+    setShowError(false);
+    setShowSuccess(false);
+
+    try {
+      const amount = selectedAmount === 'custom' ? customAmount : selectedAmount;
+      
+      const donationData = {
+        amount: parseFloat(amount),
+        donor_name: donorInfo.name,
+        donor_email: donorInfo.email,
+        donor_phone: donorInfo.phone || null,
+        payment_method: paymentMethod,
+        message: `Donation via ${paymentMethod}`
+      };
+
+      console.log('Submitting donation:', donationData);
+
+      const result = await apiPost('/api/donations', donationData);
+
+      console.log('Donation result:', result);
+
+      if (result.success) {
+        setSuccessData(result.donation);
+        setShowSuccess(true);
+        
+        // Reset form
+        setSelectedAmount('');
+        setCustomAmount('');
+        setDonorInfo({ name: '', email: '', phone: '' });
+        setPaymentMethod('card');
+      } else {
+        setErrorMessage(result.error || 'Donation failed. Please try again.');
+        setShowError(true);
+      }
+    } catch (error) {
+      console.error('Donation error:', error);
+      setErrorMessage(error.message || 'Donation failed. Please try again.');
+      setShowError(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -260,10 +318,19 @@ const DonatePage = () => {
                       variant="primary"
                       size="lg"
                       className="w-full bg-bright-orange hover:bg-orange-600"
-                      disabled={!selectedAmount || (selectedAmount === 'custom' && !customAmount)}
+                      disabled={!selectedAmount || (selectedAmount === 'custom' && !customAmount) || isLoading}
                     >
-                      <FiGift className="w-5 h-5 mr-2" />
-                      <span>Complete Donation</span>
+                      {isLoading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          <span>Processing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FiGift className="w-5 h-5 mr-2" />
+                          <span>Complete Donation</span>
+                        </>
+                      )}
                     </AnimatedButton>
                   </motion.div>
                 </form>
@@ -374,6 +441,66 @@ const DonatePage = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center"
+          >
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FiCheck className="w-8 h-8 text-green-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank You!</h3>
+            <p className="text-gray-600 mb-4">
+              Your donation of ₹{successData?.amount} has been processed successfully.
+            </p>
+            <div className="bg-gray-50 rounded-lg p-4 mb-4 text-sm">
+              <p><strong>Transaction ID:</strong> {successData?.payment_id}</p>
+              <p><strong>Status:</strong> {successData?.status}</p>
+            </div>
+            <button
+              onClick={() => setShowSuccess(false)}
+              className="bg-bright-orange text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors"
+            >
+              Continue
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Error Modal */}
+      {showError && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center"
+          >
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FiX className="w-8 h-8 text-red-600" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Donation Failed</h3>
+            <p className="text-gray-600 mb-4">{errorMessage}</p>
+            <button
+              onClick={() => setShowError(false)}
+              className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Try Again
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ const { auth } = require('../middleware/auth');
 const userService = require('../services/userService');
 const volunteerProfileService = require('../services/volunteerProfileService');
 const surveyService = require('../services/surveyService');
+const supabase = require('../config/supabase');
 
 const router = express.Router();
 
@@ -28,6 +29,17 @@ router.get('/stats', [auth, (req, res, next) => {
     // Get all surveys
     const surveys = await surveyService.getAllSurveys();
     console.log('📊 Found surveys:', surveys.length);
+
+    // Get donation statistics
+    const { data: donations, error: donationError } = await supabase
+      .from('donations')
+      .select('amount, status');
+
+    if (donationError) {
+      console.error('Error fetching donations:', donationError);
+    }
+
+    console.log('📊 Found donations:', donations?.length || 0);
 
     // Calculate statistics
     const totalVolunteers = volunteers.length;
@@ -74,6 +86,10 @@ router.get('/stats', [auth, (req, res, next) => {
         status: volunteerProfiles.find(p => p.user_id === volunteer.id) ? 'Complete' : 'Incomplete'
       }));
 
+    // Calculate donation statistics
+    const totalDonations = donations?.reduce((sum, donation) => sum + parseFloat(donation.amount), 0) || 0;
+    const completedDonations = donations?.filter(d => d.status === 'completed').length || 0;
+
     const stats = {
       totalVolunteers,
       completeProfiles,
@@ -81,6 +97,8 @@ router.get('/stats', [auth, (req, res, next) => {
       totalSurveys,
       surveysThisMonth,
       surveysThisWeek,
+      totalDonations: totalDonations.toFixed(2),
+      completedDonations,
       aadhaarStats: {
         haveAadhaar: aadhaarStats.haveAadhaar || 0,
         noAadhaar: aadhaarStats.noAadhaar || 0,

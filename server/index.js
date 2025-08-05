@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth');
 const volunteerRoutes = require('./routes/volunteer');
 const adminRoutes = require('./routes/admin');
 const uploadRoutes = require('./routes/upload');
+const donationRoutes = require('./routes/donations');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,6 +51,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/volunteer', volunteerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api', donationRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

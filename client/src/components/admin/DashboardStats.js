@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiUsers, FiCheckCircle, FiClock, FiMapPin, FiCalendar, FiBarChart } from 'react-icons/fi';
+import { FiUsers, FiCheckCircle, FiClock, FiMapPin, FiCalendar, FiBarChart, FiDollarSign } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const DashboardStats = ({ stats }) => {
@@ -88,6 +88,24 @@ const DashboardStats = ({ stats }) => {
                 </dt>
                 <dd className="text-2xl font-bold text-gray-900">
                   {stats.totalSurveys || 0}
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <FiDollarSign className="h-8 w-8 text-green-600" />
+            </div>
+            <div className="ml-5 w-0 flex-1">
+              <dl>
+                <dt className="text-sm font-medium text-gray-500 truncate">
+                  Total Donations
+                </dt>
+                <dd className="text-2xl font-bold text-gray-900">
+                  ₹{stats.totalDonations || 0}
                 </dd>
               </dl>
             </div>

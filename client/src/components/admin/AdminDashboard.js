@@ -6,6 +6,7 @@ import VolunteerList from './VolunteerList';
 import VolunteerDetail from './VolunteerDetail';
 import DashboardStats from './DashboardStats';
 import SurveyList from './SurveyList';
+import DonationList from './DonationList';
 import LoadingSpinner from '../common/LoadingSpinner';
 import { apiGet } from '../../utils/api';
 
@@ -103,6 +104,16 @@ const AdminDashboard = () => {
             >
               Surveys
             </Link>
+            <Link
+              to="/admin/donations"
+              className={`border-b-2 py-4 px-1 text-sm font-medium ${
+                isActive('/admin/donations') 
+                  ? 'border-primary-500 text-primary-600' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Donations
+            </Link>
           </nav>
         </div>
       </div>
@@ -114,6 +125,7 @@ const AdminDashboard = () => {
           <Route path="/volunteers" element={<VolunteerList />} />
           <Route path="/volunteers/:id" element={<VolunteerDetail />} />
           <Route path="/surveys" element={<SurveyList />} />
+          <Route path="/donations" element={<DonationList />} />
         </Routes>
       </div>
     </div>
