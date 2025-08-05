@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { auth } = require('../middleware/auth');
-const { supabase } = require('../config/supabase');
+const { supabase, supabaseAdmin } = require('../config/supabase');
 
 // Get all donations (admin only)
 router.get('/admin/donations', auth, async (req, res) => {
@@ -97,8 +97,8 @@ router.post('/donations', async (req, res) => {
       return res.status(400).json({ error: 'Invalid donation amount' });
     }
 
-    // Create donation record
-    const { data: donation, error } = await supabase
+    // Create donation record using admin client to bypass RLS
+    const { data: donation, error } = await supabaseAdmin
       .from('donations')
       .insert({
         amount: donationAmount,
@@ -125,8 +125,8 @@ router.post('/donations', async (req, res) => {
     const paymentResult = await simulatePayment(donation);
 
     if (paymentResult.success) {
-      // Update donation status to completed
-      const { error: updateError } = await supabase
+      // Update donation status to completed using admin client
+      const { error: updateError } = await supabaseAdmin
         .from('donations')
         .update({ status: 'completed', payment_id: paymentResult.paymentId })
         .eq('id', donation.id);
