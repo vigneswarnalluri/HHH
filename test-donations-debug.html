@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Donations Endpoint</title>
+</head>
+<body>
+    <h1>Debug Donations Endpoint</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'https://hhh-1z4h.onrender.com';
+        
+        async function debugDonations() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test 1: Main health endpoint
+                console.log('Testing main health endpoint...');
+                const healthResponse = await fetch(`${API_URL}/api/health`);
+                console.log('Main health status:', healthResponse.status);
+                
+                if (healthResponse.ok) {
+                    const healthData = await healthResponse.json();
+                    results.innerHTML += `<p>✅ Main health: ${JSON.stringify(healthData)}</p>`;
+                } else {
+                    results.innerHTML += `<p>❌ Main health failed: ${healthResponse.status}</p>`;
+                }
+                
+                // Test 2: Donations health endpoint
+                console.log('Testing donations health endpoint...');
+                const donationsHealthResponse = await fetch(`${API_URL}/api/donations/health`);
+                console.log('Donations health status:', donationsHealthResponse.status);
+                
+                if (donationsHealthResponse.ok) {
+                    const donationsHealthData = await donationsHealthResponse.json();
+                    results.innerHTML += `<p>✅ Donations health: ${JSON.stringify(donationsHealthData)}</p>`;
+                } else {
+                    const errorText = await donationsHealthResponse.text();
+                    results.innerHTML += `<p>❌ Donations health failed: ${donationsHealthResponse.status} - ${errorText}</p>`;
+                }
+                
+                // Test 3: Try to create a donation
+                console.log('Testing donation creation...');
+                const donationData = {
+                    amount: 500,
+                    donor_name: 'Test Donor',
+                    donor_email: 'test@example.com',
+                    donor_phone: '+91-9876543210',
+                    payment_method: 'card',
+                    message: 'Test donation'
+                };
+                
+                const donationResponse = await fetch(`${API_URL}/api/donations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(donationData)
+                });
+                
+                console.log('Donation creation status:', donationResponse.status);
+                
+                if (donationResponse.ok) {
+                    const donationResult = await donationResponse.json();
+                    results.innerHTML += `<p>✅ Donation creation: ${JSON.stringify(donationResult)}</p>`;
+                } else {
+                    const errorText = await donationResponse.text();
+                    results.innerHTML += `<p>❌ Donation creation failed: ${donationResponse.status} - ${errorText}</p>`;
+                }
+                
+            } catch (error) {
+                console.error('Debug failed:', error);
+                results.innerHTML += `<p>❌ Debug failed: ${error.message}</p>`;
+            }
+        }
+        
+        debugDonations();
+    </script>
+</body>
+</html> 

@@ -203,7 +203,7 @@ router.get('/donations/health', async (req, res) => {
     // Test if donations table exists
     const { data, error } = await supabase
       .from('donations')
-      .select('count')
+      .select('id')
       .limit(1);
 
     if (error) {
