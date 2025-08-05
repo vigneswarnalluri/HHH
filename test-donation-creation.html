@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Donation Creation</title>
+</head>
+<body>
+    <h1>Test Donation Creation</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'https://hhh-1z4h.onrender.com';
+        
+        async function testDonationCreation() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Step 1: Check current count
+                console.log('Checking current count...');
+                const healthResponse = await fetch(`${API_URL}/api/donations/health`);
+                const healthData = await healthResponse.json();
+                results.innerHTML += `<p>📊 Current count: ${healthData.count}</p>`;
+                
+                // Step 2: Create a donation
+                console.log('Creating donation...');
+                const donationData = {
+                    amount: 500,
+                    donor_name: 'Test Donor',
+                    donor_email: 'test@example.com',
+                    donor_phone: '+91-9876543210',
+                    payment_method: 'card',
+                    message: 'Test donation'
+                };
+                
+                const donationResponse = await fetch(`${API_URL}/api/donations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(donationData)
+                });
+                
+                if (donationResponse.ok) {
+                    const donationResult = await donationResponse.json();
+                    results.innerHTML += `<p>✅ Donation created: ${JSON.stringify(donationResult)}</p>`;
+                } else {
+                    const errorText = await donationResponse.text();
+                    results.innerHTML += `<p>❌ Donation creation failed: ${donationResponse.status} - ${errorText}</p>`;
+                }
+                
+                // Step 3: Check count again
+                console.log('Checking count after creation...');
+                const healthResponse2 = await fetch(`${API_URL}/api/donations/health`);
+                const healthData2 = await healthResponse2.json();
+                results.innerHTML += `<p>📊 Count after creation: ${healthData2.count}</p>`;
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                results.innerHTML += `<p>❌ Test failed: ${error.message}</p>`;
+            }
+        }
+        
+        testDonationCreation();
+    </script>
+</body>
+</html> 

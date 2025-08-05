@@ -156,8 +156,8 @@ router.post('/donations', async (req, res) => {
 // Health check for donations (MUST come before the dynamic route)
 router.get('/donations/health', async (req, res) => {
   try {
-    // Test if donations table exists and get count
-    const { count, error } = await supabase
+    // Test if donations table exists and get count using admin client
+    const { count, error } = await supabaseAdmin
       .from('donations')
       .select('*', { count: 'exact', head: true });
 
