@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Donations Table</title>
+</head>
+<body>
+    <h1>Test Donations Table</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_URL = 'https://hhh-1z4h.onrender.com';
+        
+        async function testDonations() {
+            const results = document.getElementById('results');
+            
+            try {
+                // Test 1: Check if donations table exists
+                console.log('Testing donations health...');
+                const healthResponse = await fetch(`${API_URL}/api/donations/health`);
+                console.log('Health status:', healthResponse.status);
+                
+                if (healthResponse.ok) {
+                    const healthData = await healthResponse.json();
+                    results.innerHTML += `<p>✅ Donations health: ${JSON.stringify(healthData)}</p>`;
+                } else {
+                    const errorText = await healthResponse.text();
+                    results.innerHTML += `<p>❌ Donations health failed: ${healthResponse.status} - ${errorText}</p>`;
+                }
+                
+                // Test 2: Try to create a donation
+                console.log('Creating test donation...');
+                const donationData = {
+                    amount: 1000,
+                    donor_name: 'Test User',
+                    donor_email: 'test@example.com',
+                    donor_phone: '+91-9876543210',
+                    payment_method: 'card',
+                    message: 'Test donation from admin'
+                };
+                
+                const donationResponse = await fetch(`${API_URL}/api/donations`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(donationData)
+                });
+                
+                console.log('Donation creation status:', donationResponse.status);
+                
+                if (donationResponse.ok) {
+                    const donationResult = await donationResponse.json();
+                    results.innerHTML += `<p>✅ Donation created: ${JSON.stringify(donationResult)}</p>`;
+                } else {
+                    const errorText = await donationResponse.text();
+                    results.innerHTML += `<p>❌ Donation creation failed: ${donationResponse.status} - ${errorText}</p>`;
+                }
+                
+                // Test 3: Check admin stats
+                console.log('Checking admin stats...');
+                const statsResponse = await fetch(`${API_URL}/api/admin/stats`, {
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                
+                console.log('Admin stats status:', statsResponse.status);
+                
+                if (statsResponse.ok) {
+                    const statsData = await statsResponse.json();
+                    results.innerHTML += `<p>✅ Admin stats: ${JSON.stringify(statsData)}</p>`;
+                } else {
+                    const errorText = await statsResponse.text();
+                    results.innerHTML += `<p>❌ Admin stats failed: ${statsResponse.status} - ${errorText}</p>`;
+                }
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                results.innerHTML += `<p>❌ Test failed: ${error.message}</p>`;
+            }
+        }
+        
+        testDonations();
+    </script>
+</body>
+</html> 

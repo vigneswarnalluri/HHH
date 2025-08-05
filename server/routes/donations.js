@@ -153,7 +153,46 @@ router.post('/donations', async (req, res) => {
   }
 });
 
-// Get donation by ID
+// Health check for donations (MUST come before the dynamic route)
+router.get('/donations/health', async (req, res) => {
+  try {
+    // Test if donations table exists
+    const { data, error } = await supabase
+      .from('donations')
+      .select('id')
+      .limit(1);
+
+    if (error) {
+      if (error.code === '42P01') {
+        return res.json({ 
+          status: 'error', 
+          message: 'Donations table not found. Please run the database migration.',
+          error: error.message 
+        });
+      }
+      return res.json({ 
+        status: 'error', 
+        message: 'Database connection issue',
+        error: error.message 
+      });
+    }
+
+    res.json({ 
+      status: 'ok', 
+      message: 'Donations table exists and is accessible',
+      count: data?.length || 0
+    });
+  } catch (error) {
+    console.error('Donations health check error:', error);
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Health check failed',
+      error: error.message 
+    });
+  }
+});
+
+// Get donation by ID (MUST come after specific routes)
 router.get('/donations/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -196,44 +235,5 @@ async function simulatePayment(donation) {
     };
   }
 }
-
-// Health check for donations
-router.get('/donations/health', async (req, res) => {
-  try {
-    // Test if donations table exists
-    const { data, error } = await supabase
-      .from('donations')
-      .select('id')
-      .limit(1);
-
-    if (error) {
-      if (error.code === '42P01') {
-        return res.json({ 
-          status: 'error', 
-          message: 'Donations table not found. Please run the database migration.',
-          error: error.message 
-        });
-      }
-      return res.json({ 
-        status: 'error', 
-        message: 'Database connection issue',
-        error: error.message 
-      });
-    }
-
-    res.json({ 
-      status: 'ok', 
-      message: 'Donations table exists and is accessible',
-      count: data?.length || 0
-    });
-  } catch (error) {
-    console.error('Donations health check error:', error);
-    res.status(500).json({ 
-      status: 'error', 
-      message: 'Health check failed',
-      error: error.message 
-    });
-  }
-});
 
 module.exports = router; 
