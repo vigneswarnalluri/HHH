@@ -114,7 +114,10 @@ router.post('/donations', async (req, res) => {
 
     if (error) {
       console.error('Error creating donation:', error);
-      return res.status(500).json({ error: 'Failed to create donation' });
+      if (error.code === '42P01') {
+        return res.status(500).json({ error: 'Donations table not found. Please run the database migration first.' });
+      }
+      return res.status(500).json({ error: 'Failed to create donation: ' + error.message });
     }
 
     // In a real application, you would integrate with a payment gateway here
@@ -193,5 +196,44 @@ async function simulatePayment(donation) {
     };
   }
 }
+
+// Health check for donations
+router.get('/donations/health', async (req, res) => {
+  try {
+    // Test if donations table exists
+    const { data, error } = await supabase
+      .from('donations')
+      .select('count')
+      .limit(1);
+
+    if (error) {
+      if (error.code === '42P01') {
+        return res.json({ 
+          status: 'error', 
+          message: 'Donations table not found. Please run the database migration.',
+          error: error.message 
+        });
+      }
+      return res.json({ 
+        status: 'error', 
+        message: 'Database connection issue',
+        error: error.message 
+      });
+    }
+
+    res.json({ 
+      status: 'ok', 
+      message: 'Donations table exists and is accessible',
+      count: data?.length || 0
+    });
+  } catch (error) {
+    console.error('Donations health check error:', error);
+    res.status(500).json({ 
+      status: 'error', 
+      message: 'Health check failed',
+      error: error.message 
+    });
+  }
+});
 
 module.exports = router; 
